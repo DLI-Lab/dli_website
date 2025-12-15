@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  /* Slightly reduce overall UI scale at 100% zoom */
+  font-size: 15px;
+}
+
+.animate-sponsor-scroll {
+  --gap-offset: 2rem; /* half of gap-16 (4rem) */
+  --scroll-duration: 80s;
+  width: max-content;
+  animation: sponsor-scroll var(--scroll-duration) linear infinite;
+}
+
+@keyframes sponsor-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - var(--gap-offset)));
+  }
+}
+
+/* Mobile/tablet: faster belt and adjusted gap */
+@media (max-width: 1024px) {
+  .animate-sponsor-scroll {
+    --gap-offset: 1.5rem; /* half of gap-12 (3rem) */
+    --scroll-duration: 60s;
+  }
+}

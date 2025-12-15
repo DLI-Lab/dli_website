@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependencies & builds
+node_modules
+.next
+dist
+build
+.turbo
+.sanity
+
+# Env files (frontend/studio)
+.env*
+web/.env*
+studio/.env*
+
+# Tooling
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage
+
