@@ -116,10 +116,22 @@ export function CustomStudioLayout(props: LayoutProps) {
       <style>{wideFormStyles}</style>
       <div
         style={{
+          // Sanity 내부 패널/리스트가 부모 높이를 기준으로 flex/stretch 되기 때문에
+          // 최상위 래퍼는 반드시 뷰포트 높이를 잡아줘야 함.
+          // (height가 없으면 리스트 영역이 내용 높이만큼만 렌더되어 하단이 비어 보일 수 있음)
+          height: '100dvh',
+          minHeight: '100vh',
           maxWidth: '100%',
           margin: '0 auto',
           width: '100%',
           padding: '0 16px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          minWidth: 0,
+          // flex 자식의 스크롤 영역이 잘리지 않게
+          // (Safari/Chromium에서 min-height 기본값 때문에 스크롤이 깨지는 케이스 방지)
+          // 참고: minHeight는 위에서 이미 '100vh'로 잡고 있으므로 여기선 지정하지 않음
         }}
       >
         {renderDefault(props)}
