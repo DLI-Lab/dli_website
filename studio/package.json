@@ -15,7 +15,11 @@
     "sanity"
   ],
   "dependencies": {
+    "@sanity/code-input": "^6.0.3",
+    "@sanity/presentation": "^2.0.0",
     "@sanity/vision": "^4.21.1",
+    "canvas": "^3.2.0",
+    "heic2any": "^0.0.4",
     "react": "^19.1",
     "react-dom": "^19.1",
     "sanity": "^4.21.1",

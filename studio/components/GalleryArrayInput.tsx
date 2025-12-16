@@ -4,6 +4,45 @@ import {useCallback, useRef, useState} from 'react'
 // 고유한 _key 생성 함수
 const generateKey = () => Math.random().toString(36).slice(2, 10)
 
+// heic2any를 브라우저 환경에서만 동적 로드 (CLI 실행 시 Worker/Canvas 문제 방지)
+let heic2anyModule: any | null = null
+const getHeic2any = async () => {
+  if (typeof window === 'undefined') {
+    throw new Error('HEIC 변환은 브라우저 환경에서만 지원됩니다.')
+  }
+  if (!heic2anyModule) {
+    const mod = await import('heic2any')
+    heic2anyModule = (mod as any).default ?? mod
+  }
+  return heic2anyModule
+}
+
+// HEIC 파일을 JPEG로 변환하는 헬퍼 함수
+const convertHeicToJpeg = async (file: File): Promise<File> => {
+  try {
+    const heic2any = await getHeic2any()
+    const convertedBlob = await heic2any({
+      blob: file,
+      toType: 'image/jpeg',
+      quality: 0.92,
+    })
+    
+    // heic2any는 배열을 반환할 수 있으므로 첫 번째 항목 사용
+    const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob
+    
+    // 원본 파일명에서 확장자만 변경
+    const newFileName = file.name.replace(/\.(heic|heif)$/i, '.jpg')
+    
+    return new File([blob], newFileName, {
+      type: 'image/jpeg',
+      lastModified: Date.now(),
+    })
+  } catch (error) {
+    console.error('HEIC 변환 중 오류:', error)
+    throw new Error('HEIC 파일을 JPEG로 변환할 수 없습니다.')
+  }
+}
+
 export function GalleryImagesArrayInput(props: ArrayOfObjectsInputProps) {
   const isEmpty = !props.value || props.value.length === 0
   const client = useClient({apiVersion: '2024-01-01'})
@@ -16,7 +55,13 @@ export function GalleryImagesArrayInput(props: ArrayOfObjectsInputProps) {
   const handleFiles = useCallback(
     async (files: FileList | File[]) => {
       const fileArray = Array.from(files)
-      const imageFiles = fileArray.filter((file) => file.type.startsWith('image/'))
+      // 이미지 파일 필터링: MIME 타입 체크 + HEIC/HEIF 확장자 체크
+      const imageFiles = fileArray.filter((file) => {
+        const isImageMime = file.type.startsWith('image/')
+        const fileName = file.name.toLowerCase()
+        const isHeicExtension = fileName.endsWith('.heic') || fileName.endsWith('.heif')
+        return isImageMime || isHeicExtension
+      })
 
       if (imageFiles.length === 0) {
         console.warn('이미지 파일만 업로드할 수 있습니다')
@@ -30,8 +75,17 @@ export function GalleryImagesArrayInput(props: ArrayOfObjectsInputProps) {
         const uploadedImages: Array<{_key: string; _type: string; asset: {_type: string; _ref: string}}> = []
         
         for (let i = 0; i < imageFiles.length; i++) {
-          const file = imageFiles[i]
+          let file = imageFiles[i]
           setUploadProgress(`${i + 1} / ${imageFiles.length}`)
+          
+          // HEIC/HEIF 파일인지 확인하고 변환
+          const fileName = file.name.toLowerCase()
+          const isHeicFile = fileName.endsWith('.heic') || fileName.endsWith('.heif')
+          
+          if (isHeicFile) {
+            // HEIC를 JPEG로 변환
+            file = await convertHeicToJpeg(file)
+          }
           
           const asset = await client.assets.upload('image', file, {
             filename: file.name,
@@ -259,7 +313,7 @@ export function GalleryImagesArrayInput(props: ArrayOfObjectsInputProps) {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/*,.heic,.heif"
         multiple
         style={{display: 'none'}}
         onChange={handleFileInputChange}
