@@ -55,6 +55,7 @@ export default function NewsSection() {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string>("");
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/news")
@@ -70,6 +71,16 @@ export default function NewsSection() {
         setLoading(false);
       });
   }, []);
+
+  const handleNewsClick = (id: string) => {
+    setSelectedId(id);
+    // 모바일(lg 미만)일 경우 모달 열기
+    if (window.innerWidth < 1024) {
+      setIsMobileModalOpen(true);
+    }
+  };
+
+  const closeModal = () => setIsMobileModalOpen(false);
 
   const selectedNews = newsData.find((n: NewsItem) => n._id === selectedId);
 
@@ -106,6 +117,200 @@ export default function NewsSection() {
     );
   };
 
+  // 상세 내용을 렌더링하는 함수 (데스크탑/모바일 공용)
+  const renderNewsDetail = (news: NewsItem) => (
+    <div className="space-y-4">
+      {/* 카테고리 뱃지 */}
+      <div className="mb-4">
+        <span
+          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+            categoryStyles[news.category].bg
+          } ${categoryStyles[news.category].text}`}
+        >
+          {categoryStyles[news.category].label}
+        </span>
+      </div>
+
+      {/* 날짜 */}
+      <p className="text-sm text-gray-400 mb-3">{news.date}</p>
+
+      {/* 이미지 */}
+      {news.image?.asset?.url && (
+        <div className="mb-4 rounded-xl overflow-hidden">
+          <img
+            src={news.image.asset.url}
+            alt={news.summary}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      )}
+
+      {/* Academic 타입 */}
+      {news.category === "academic" && (
+        <div className="space-y-4">
+          {news.papers && news.papers.length > 0 ? (
+            <>
+              <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
+                {news.summary}
+              </h3>
+              <div className="divide-y divide-gray-200">
+                {news.papers.map((paper: AcademicPaper, idx: number) => (
+                  <div
+                    key={`${news._id}-paper-${idx}`}
+                    className="py-4"
+                  >
+                    <h4 className="text-base lg:text-lg font-semibold text-gray-900 leading-snug">
+                      {paper.title}
+                    </h4>
+                    {paper.authors && (
+                      <p className="text-base lg:text-lg text-gray-600 mt-2">
+                        {paper.authors}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      {paper.venue && (
+                        <span className="text-sm lg:text-base text-gray-700 font-medium">
+                          {paper.venue}
+                        </span>
+                      )}
+                      {paper.note && (
+                        <span className="text-sm lg:text-base text-red-600 font-medium">
+                          ({paper.note})
+                        </span>
+                      )}
+                      {(paper.paperUrl || paper.codeUrl || paper.datasetUrl) && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {paper.paperUrl && (
+                            <a
+                              href={paper.paperUrl}
+                              className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              paper
+                            </a>
+                          )}
+                          {paper.codeUrl && (
+                            <a
+                              href={paper.codeUrl}
+                              className="inline-flex items-center px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs lg:text-sm font-semibold text-violet-700 hover:bg-violet-100 hover:border-violet-300 transition-colors"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              code
+                            </a>
+                          )}
+                          {paper.datasetUrl && (
+                            <a
+                              href={paper.datasetUrl}
+                              className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs lg:text-sm font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              dataset
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="space-y-4">
+              {renderDescription(news.description)}
+              <div className="pt-4 border-t border-gray-200 space-y-2">
+                <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
+                  {news.paperTitle}
+                </h3>
+                <p className="text-base lg:text-lg text-gray-600">
+                  {news.authors}
+                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-base lg:text-lg text-gray-700 font-medium">
+                    {news.venue}
+                  </p>
+                  {news.note && (
+                    <span className="text-base lg:text-lg text-red-600 font-medium">
+                      ({news.note})
+                    </span>
+                  )}
+                </div>
+                {(news.paperUrl || news.codeUrl || news.datasetUrl) && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {news.paperUrl && (
+                      <a
+                        href={news.paperUrl}
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        paper
+                      </a>
+                    )}
+                    {news.codeUrl && (
+                      <a
+                        href={news.codeUrl}
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs lg:text-sm font-semibold text-violet-700 hover:bg-violet-100 hover:border-violet-300 transition-colors"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        code
+                      </a>
+                    )}
+                    {news.datasetUrl && (
+                      <a
+                        href={news.datasetUrl}
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs lg:text-sm font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        dataset
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* News / Award 타입 */}
+      {(news.category === "news" || news.category === "award") && (
+        <div className="space-y-3">
+          <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
+            {news.summary}
+          </h3>
+          {renderDescription(news.description)}
+          <div className="flex flex-wrap items-center gap-2 justify-end">
+            {news.paperUrl && (
+              <a
+                href={news.paperUrl}
+                className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
+                target="_blank"
+                rel="noreferrer"
+              >
+                paper
+              </a>
+            )}
+            {news.link && (
+              <a
+                href={news.link}
+                className="inline-flex items-center px-4 py-2 rounded-full bg-sky-50 border border-sky-200 text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Read the full story
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -138,7 +343,7 @@ export default function NewsSection() {
               return (
                 <li key={item._id} className="py-2">
                   <button
-                    onClick={() => setSelectedId(item._id)}
+                    onClick={() => handleNewsClick(item._id)}
                     aria-selected={isSelected}
                     className={`relative w-full text-left px-4 py-4 rounded-none transition-colors duration-200 flex items-center gap-4 group cursor-pointer ${
                       isSelected ? "bg-transparent" : "bg-transparent"
@@ -206,202 +411,45 @@ export default function NewsSection() {
           </ul>
         </div>
 
-        {/* 오른쪽: 상세 패널 */}
-        <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 flex items-start min-h-0">
+        {/* 오른쪽: 상세 패널 (데스크탑) */}
+        <div className="hidden lg:flex lg:col-start-2 lg:row-start-1 lg:row-span-2 items-start min-h-0">
           {selectedNews && (
             <div className="px-5 pb-5 pt-2 lg:px-7 lg:pb-7 lg:pt-3 w-full lg:h-full lg:overflow-y-auto lg:min-h-0">
-              {/* 카테고리 뱃지 */}
-              <div className="mb-4">
-                <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    categoryStyles[selectedNews.category].bg
-                  } ${categoryStyles[selectedNews.category].text}`}
-                >
-                  {categoryStyles[selectedNews.category].label}
-                </span>
-              </div>
-
-              {/* 날짜 */}
-              <p className="text-sm text-gray-400 mb-3">{selectedNews.date}</p>
-
-              {/* 이미지 */}
-              {selectedNews.image?.asset?.url && (
-                <div className="mb-4 rounded-xl overflow-hidden">
-                  <img
-                    src={selectedNews.image.asset.url}
-                    alt={selectedNews.summary}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              )}
-
-              {/* Academic 타입 */}
-              {selectedNews.category === "academic" && (
-                <div className="space-y-4">
-                  {selectedNews.papers && selectedNews.papers.length > 0 ? (
-                    <>
-                      <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
-                        {selectedNews.summary}
-                      </h3>
-                      <div className="divide-y divide-gray-200">
-                        {selectedNews.papers.map((paper: AcademicPaper, idx: number) => (
-                          <div
-                            key={`${selectedNews._id}-paper-${idx}`}
-                            className="py-4"
-                          >
-                            <h4 className="text-base lg:text-lg font-semibold text-gray-900 leading-snug">
-                              {paper.title}
-                            </h4>
-                            {paper.authors && (
-                              <p className="text-base lg:text-lg text-gray-600 mt-2">
-                                {paper.authors}
-                              </p>
-                            )}
-                            <div className="flex flex-wrap items-center gap-2 mt-2">
-                              {paper.venue && (
-                                <span className="text-sm lg:text-base text-gray-700 font-medium">
-                                  {paper.venue}
-                                </span>
-                              )}
-                              {paper.note && (
-                                <span className="text-sm lg:text-base text-red-600 font-medium">
-                                  ({paper.note})
-                                </span>
-                              )}
-                              {(paper.paperUrl || paper.codeUrl || paper.datasetUrl) && (
-                                <div className="flex flex-wrap gap-1.5">
-                                  {paper.paperUrl && (
-                                    <a
-                                      href={paper.paperUrl}
-                                      className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      paper
-                                    </a>
-                                  )}
-                                  {paper.codeUrl && (
-                                    <a
-                                      href={paper.codeUrl}
-                                      className="inline-flex items-center px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs lg:text-sm font-semibold text-violet-700 hover:bg-violet-100 hover:border-violet-300 transition-colors"
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      code
-                                    </a>
-                                  )}
-                                  {paper.datasetUrl && (
-                                    <a
-                                      href={paper.datasetUrl}
-                                      className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs lg:text-sm font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      dataset
-                                    </a>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="space-y-4">
-                      {renderDescription(selectedNews.description)}
-                      <div className="pt-4 border-t border-gray-200 space-y-2">
-                        <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
-                          {selectedNews.paperTitle}
-                        </h3>
-                        <p className="text-base lg:text-lg text-gray-600">
-                          {selectedNews.authors}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <p className="text-base lg:text-lg text-gray-700 font-medium">
-                            {selectedNews.venue}
-                          </p>
-                          {selectedNews.note && (
-                            <span className="text-base lg:text-lg text-red-600 font-medium">
-                              ({selectedNews.note})
-                            </span>
-                          )}
-                        </div>
-                        {(selectedNews.paperUrl || selectedNews.codeUrl || selectedNews.datasetUrl) && (
-                          <div className="flex flex-wrap gap-1.5 pt-1">
-                            {selectedNews.paperUrl && (
-                              <a
-                                href={selectedNews.paperUrl}
-                                className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                paper
-                              </a>
-                            )}
-                            {selectedNews.codeUrl && (
-                              <a
-                                href={selectedNews.codeUrl}
-                                className="inline-flex items-center px-3 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs lg:text-sm font-semibold text-violet-700 hover:bg-violet-100 hover:border-violet-300 transition-colors"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                code
-                              </a>
-                            )}
-                            {selectedNews.datasetUrl && (
-                              <a
-                                href={selectedNews.datasetUrl}
-                                className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs lg:text-sm font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                dataset
-                              </a>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* News / Award 타입 */}
-              {(selectedNews.category === "news" || selectedNews.category === "award") && (
-                <div className="space-y-3">
-                  <h3 className="text-lg lg:text-xl font-bold text-gray-900 leading-snug">
-                    {selectedNews.summary}
-                  </h3>
-                  {renderDescription(selectedNews.description)}
-                  <div className="flex flex-wrap items-center gap-2 justify-end">
-                    {selectedNews.paperUrl && (
-                      <a
-                        href={selectedNews.paperUrl}
-                        className="inline-flex items-center px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs lg:text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        paper
-                      </a>
-                    )}
-                    {selectedNews.link && (
-                      <a
-                        href={selectedNews.link}
-                        className="inline-flex items-center px-4 py-2 rounded-full bg-sky-50 border border-sky-200 text-sm font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Read the full story
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
+              {renderNewsDetail(selectedNews)}
             </div>
           )}
         </div>
       </div>
+
+      {/* 모바일 모달 */}
+      {isMobileModalOpen && selectedNews && (
+        <div
+          className="fixed inset-0 z-50 lg:hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-2xl w-[90vw] !max-w-[90vw] lg:max-w-lg max-h-[80vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200"
+            style={{ width: "90vw", maxHeight: "80vh" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* 모달 내용 (스크롤 가능) */}
+            <div className="p-5 overflow-y-auto flex-1">
+              <div className="flex justify-end mb-2">
+                <button
+                  onClick={closeModal}
+                  className="p-2 -mr-1 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              {renderNewsDetail(selectedNews)}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
