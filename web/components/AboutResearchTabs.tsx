@@ -101,8 +101,8 @@ export default function AboutResearchTabs() {
 
   return (
     <div>
-      {/* 탭 버튼 */}
-      <div className="flex justify-center gap-10 mb-10">
+      {/* 탭 버튼 - 모바일에서 숨김 */}
+      <div className="hidden lg:flex justify-center gap-10 mb-10">
         <button
           onClick={() => setActiveTab("about")}
           className={`pb-2 text-xl lg:text-2xl transition-all duration-300 ${
@@ -126,22 +126,22 @@ export default function AboutResearchTabs() {
       </div>
 
       {/* 탭 콘텐츠 */}
-      <div className="relative overflow-hidden pr-10 h-[600px]">
-        {/* 슬라이드 인디케이터 화살표 (우측 중앙) */}
+      <div className="relative overflow-hidden pr-10 lg:pr-10 pr-0 h-[600px]">
+        {/* 슬라이드 인디케이터 화살표 (우측 중앙) - 데스크탑에서만 표시 */}
         <button
           aria-label={activeTab === "about" ? "Go to Research" : "Go to About"}
           onClick={() => setActiveTab(activeTab === "about" ? "research" : "about")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 px-5 py-4 text-4xl text-gray-300 hover:text-gray-700 hover:scale-110 transition-all cursor-pointer"
+          className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 px-5 py-4 text-4xl text-gray-300 hover:text-gray-700 hover:scale-110 transition-all cursor-pointer"
           style={{ textShadow: "0 0 8px rgba(0,0,0,0.15)" }}
         >
           {activeTab === "about" ? ">" : "<"}
         </button>
-        {/* About 콘텐츠 */}
+        {/* About 콘텐츠 - 모바일에서 항상 표시 */}
         <div
-          className={`transition-all duration-500 ease-in-out ${
+          className={`lg:transition-all lg:duration-500 lg:ease-in-out ${
             activeTab === "about"
               ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-8 absolute inset-0 pointer-events-none"
+              : "lg:opacity-0 lg:-translate-x-8 lg:absolute lg:inset-0 lg:pointer-events-none opacity-100 translate-x-0"
           }`}
         >
           <div className="h-full flex flex-col overflow-hidden">
@@ -151,9 +151,9 @@ export default function AboutResearchTabs() {
           </div>
         </div>
 
-        {/* Research 콘텐츠 */}
+        {/* Research 콘텐츠 - 모바일에서 숨김 */}
         <div
-          className={`transition-all duration-500 ease-in-out ${
+          className={`hidden lg:block transition-all duration-500 ease-in-out ${
             activeTab === "research"
               ? "opacity-100 translate-x-0"
               : "opacity-0 translate-x-8 absolute inset-0 pointer-events-none"

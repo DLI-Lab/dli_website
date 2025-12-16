@@ -334,7 +334,7 @@ export default function NewsSection() {
         </h2>
 
         {/* 왼쪽: 뉴스 목록 (스크롤 가능) */}
-        <div className="lg:col-start-1 lg:row-start-2 lg:overflow-y-auto lg:min-h-0">
+        <div className="lg:col-start-1 lg:row-start-2 lg:overflow-y-auto lg:min-h-0 overflow-y-auto max-h-[60vh] lg:max-h-none">
           <ul className="pr-2 divide-y-2 divide-gray-300">
             {newsData.map((item: NewsItem) => {
               const style = categoryStyles[item.category];

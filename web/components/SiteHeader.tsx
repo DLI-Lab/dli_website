@@ -26,9 +26,12 @@ export default function SiteHeader() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-sm">
       <nav className="max-w-[1600px] mx-auto flex items-center justify-between px-6 md:px-8 lg:px-12 h-16 md:h-20 lg:h-24">
         {/* Logo */}
-        <div className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 shrink-0">
+        <a 
+          href="/"
+          className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 shrink-0 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
+        >
           DLI Lab
-        </div>
+        </a>
 
         {/* Desktop menu */}
         <ul className="hidden md:flex items-center gap-6 lg:gap-8 text-base lg:text-xl">
