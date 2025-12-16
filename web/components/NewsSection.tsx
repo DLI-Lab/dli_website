@@ -118,18 +118,20 @@ export default function NewsSection() {
   };
 
   // 상세 내용을 렌더링하는 함수 (데스크탑/모바일 공용)
-  const renderNewsDetail = (news: NewsItem) => (
+  const renderNewsDetail = (news: NewsItem, options?: { hideCategory?: boolean }) => (
     <div className="space-y-4">
-      {/* 카테고리 뱃지 */}
-      <div className="mb-4">
-        <span
-          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-            categoryStyles[news.category].bg
-          } ${categoryStyles[news.category].text}`}
-        >
-          {categoryStyles[news.category].label}
-        </span>
-      </div>
+      {/* 카테고리 뱃지 (옵션에 따라 숨김) */}
+      {!options?.hideCategory && (
+        <div className="mb-4">
+          <span
+            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+              categoryStyles[news.category].bg
+            } ${categoryStyles[news.category].text}`}
+          >
+            {categoryStyles[news.category].label}
+          </span>
+        </div>
+      )}
 
       {/* 날짜 */}
       <p className="text-sm text-gray-400 mb-3">{news.date}</p>
@@ -424,7 +426,7 @@ export default function NewsSection() {
       {/* 모바일 모달 */}
       {isMobileModalOpen && selectedNews && (
         <div
-          className="fixed inset-0 z-50 lg:hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 lg:hidden flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm"
           onClick={closeModal}
         >
           <div
@@ -433,8 +435,16 @@ export default function NewsSection() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* 모달 내용 (스크롤 가능) */}
-            <div className="p-5 overflow-y-auto flex-1">
-              <div className="flex justify-end mb-2">
+            <div className="px-4 pb-3 pt-3 overflow-y-auto flex-1">
+              {/* 카테고리 + 닫기 버튼 한 줄 */}
+              <div className="flex items-center justify-between mb-3">
+                <span
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    categoryStyles[selectedNews.category].bg
+                  } ${categoryStyles[selectedNews.category].text}`}
+                >
+                  {categoryStyles[selectedNews.category].label}
+                </span>
                 <button
                   onClick={closeModal}
                   className="p-2 -mr-1 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
@@ -445,7 +455,7 @@ export default function NewsSection() {
                   </svg>
                 </button>
               </div>
-              {renderNewsDetail(selectedNews)}
+              {renderNewsDetail(selectedNews, { hideCategory: true })}
             </div>
           </div>
         </div>
