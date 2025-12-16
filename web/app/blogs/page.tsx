@@ -2,6 +2,7 @@ import { draftMode } from "next/headers";
 import BlogsPageClient, { BlogPostForClient } from "@/components/BlogsPageClient";
 import { getClient } from "@/src/sanity/client";
 import { blogsQuery } from "@/src/sanity/queries";
+import { Suspense } from "react";
 
 type SanityImage = {
   asset?: {
@@ -79,6 +80,10 @@ export default async function BlogsPage() {
     .map((post) => normalizeBlog(post))
     .filter((post): post is BlogPostForClient => Boolean(post));
 
-  return <BlogsPageClient posts={posts} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BlogsPageClient posts={posts} />
+    </Suspense>
+  );
 }
 
