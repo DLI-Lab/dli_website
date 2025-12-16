@@ -18,8 +18,10 @@ export interface BlogCardProps {
   authorAvatar?: string;
   /** 작성 날짜 */
   date: string;
-  /** 링크 URL */
+  /** 링크 URL (모달 등 클릭 처리 시 생략) */
   href?: string;
+  /** 카드 클릭 핸들러 */
+  onClick?: () => void;
 }
 
 export default function BlogCard({
@@ -31,10 +33,26 @@ export default function BlogCard({
   authorAvatar,
   date,
   href = "#",
+  onClick,
 }: BlogCardProps) {
+  const Wrapper = ({ children }: { children: React.ReactNode }) => {
+    if (onClick) {
+      return (
+        <button type="button" onClick={onClick} className="group block w-full text-left">
+          {children}
+        </button>
+      );
+    }
+    return (
+      <a href={href} className="group block">
+        {children}
+      </a>
+    );
+  };
+
   return (
-    <a href={href} className="group block">
-      <article className="h-full flex flex-col p-3 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-lg hover:-translate-y-1">
+    <Wrapper>
+      <article className="h-full flex flex-col p-3 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-lg hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
         {/* 썸네일 */}
         <div className="relative w-full h-48 sm:h-52 lg:h-48 overflow-hidden rounded-xl bg-gray-100 mb-4">
           <img
@@ -88,7 +106,7 @@ export default function BlogCard({
           </div>
         </div>
       </article>
-    </a>
+    </Wrapper>
   );
 }
 

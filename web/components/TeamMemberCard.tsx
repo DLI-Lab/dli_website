@@ -12,6 +12,10 @@ export interface TeamMember {
 export default function TeamMemberCard({ name, role, bio, image, email, website, researchArea, googleScholar }: TeamMember) {
   const src = image || "/placeholder.png";
   const isProfessor = role.toLowerCase().includes("professor") || role.toLowerCase() === "faculty";
+  
+  // bio가 짧아서 스크롤이 필요 없을 가능성이 높은 경우 판단
+  // Professor: 125px 높이, 일반: 86px 높이 기준으로 대략 50-60자 이하면 스크롤 불필요
+  const needsScroll = bio ? (isProfessor ? bio.length > 150 : bio.length > 100) : false;
 
   const normalizedWebsite = website ? (website.startsWith("http") ? website : `https://${website}`) : "";
   const websiteMeta =
@@ -34,7 +38,7 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
           <img
             src={src}
             alt={name}
-            className="w-full h-full object-contain lg:object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain lg:object-cover transform-none"
           />
         </div>
         
@@ -58,7 +62,7 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
             </div>
             
             {/* Bio paragraph - fixed space, always reserved */}
-            <div className="h-auto lg:h-[125px] overflow-visible lg:overflow-hidden flex items-start lg:items-center pt-3 lg:pt-0">
+            <div className="h-auto lg:h-[125px] overflow-y-auto flex pt-3 lg:pt-0 bio-scrollbar items-center lg:items-center">
               {bio && (
                 <p
                   className={`text-gray-600 leading-relaxed text-left whitespace-pre-line break-words ${
@@ -109,7 +113,7 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
         <img
           src={src}
           alt={name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transform-none"
         />
       </div>
       
@@ -139,9 +143,11 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
           </div>
           
           {/* Bio paragraph - fixed space, always reserved */}
-          <div className="flex-1 min-h-0 max-h-[86px] overflow-hidden flex items-center">
+          <div className={`flex-1 min-h-0 max-h-[86px] overflow-y-auto flex bio-scrollbar ${
+            needsScroll ? "items-start" : "items-center"
+          }`}>
             {bio && (
-              <p className={`text-gray-600 leading-relaxed text-left ${
+              <p className={`text-gray-600 leading-relaxed text-left whitespace-pre-line break-words ${
                 bio.length > 150 ? "text-xs" : "text-xs lg:text-sm"
               }`}>
                 {bio}

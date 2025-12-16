@@ -66,24 +66,28 @@ export default async function TeamPage() {
 
   const { professor, phd, msPhd, master, undergrad, industryResearchers, collaborators, alumni } = grouped;
 
-  const studentSections: { title: string; people: TeamMember[] }[] = [
+  // 모든 섹션을 하나의 배열로 통합
+  const allSections: { title: string; people: TeamMember[]; isProfessor?: boolean }[] = [
+    { title: "Professor", people: professor, isProfessor: true },
     { title: "PhD", people: phd },
     { title: "MS/PhD", people: msPhd },
     { title: "Master", people: master },
     { title: "Undergrad", people: undergrad },
-  ];
-
-  const otherSections: { title: string; people: TeamMember[] }[] = [
     { title: "Industry Researchers", people: industryResearchers },
     { title: "Collaborators", people: collaborators },
     { title: "Alumni", people: alumni },
   ];
 
-  const studentSectionHighlightBg: Record<string, string> = {
+  // 각 섹션별 하이라이트 색상
+  const sectionHighlightBg: Record<string, string> = {
+    Professor: "bg-rose-200/70",
     PhD: "bg-sky-200/70",
     "MS/PhD": "bg-violet-200/65",
     Master: "bg-emerald-200/65",
     Undergrad: "bg-amber-200/70",
+    "Industry Researchers": "bg-indigo-200/70",
+    Collaborators: "bg-teal-200/70",
+    Alumni: "bg-slate-200/70",
   };
 
   return (
@@ -97,60 +101,44 @@ export default async function TeamPage() {
 
       <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12 lg:py-16">
         <div className="space-y-14">
-          {/* Professor Section */}
-          {professor.length > 0 && (
-            <div className="space-y-5 pb-10 border-b-2 border-gray-200">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-6">Professor</h2>
-              <div className="flex justify-center">
-                {professor.map((m, idx) => (
-                  <TeamMemberCard key={`professor-${idx}`} {...m} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Students Section */}
-          <div className="space-y-10 pt-2">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-6">Students</h2>
-            {studentSections.map(
-              (section) =>
-                section.people.length > 0 && (
-                  <div key={section.title} className="space-y-6">
-                    <h3 className="text-lg lg:text-xl font-semibold text-gray-800">
-                      <span className="relative inline-block px-2">
-                        <span
-                          aria-hidden
-                          className={`absolute inset-x-0 bottom-[0.22em] h-[0.72em] rounded-sm -skew-x-12 ${
-                            studentSectionHighlightBg[section.title] || "bg-slate-200/70"
-                          }`}
-                        />
-                        <span className="relative">{section.title}</span>
-                      </span>
-                    </h3>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          {/* All Sections */}
+          {allSections.map(
+            (section, sectionIdx) =>
+              section.people.length > 0 && (
+                <div
+                  key={section.title}
+                  className={`space-y-6 ${
+                    sectionIdx < allSections.length - 1 && allSections[sectionIdx + 1]?.people.length > 0
+                      ? "pb-10 border-b-2 border-gray-200"
+                      : section.title === "Alumni"
+                      ? "pb-10 lg:pb-14"
+                      : ""
+                  }`}
+                >
+                  <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
+                    <span className="relative inline-block px-2">
+                      <span
+                        aria-hidden
+                        className={`absolute inset-x-0 bottom-[0.18em] h-[0.55em] rounded-sm -skew-x-12 ${
+                          sectionHighlightBg[section.title] || "bg-slate-200/70"
+                        }`}
+                      />
+                      <span className="relative">{section.title}</span>
+                    </span>
+                  </h2>
+                  {section.isProfessor ? (
+                    <div className="flex justify-center">
                       {section.people.map((m, idx) => (
                         <TeamMemberCard key={`${section.title}-${idx}`} {...m} />
                       ))}
                     </div>
-                  </div>
-                )
-            )}
-          </div>
-
-          {/* Other Sections */}
-          {otherSections.map(
-            (section) =>
-              section.people.length > 0 && (
-                <div
-                  key={section.title}
-                  className={`space-y-6 ${section.title === "Alumni" ? "pb-10 lg:pb-14" : ""}`}
-                >
-                  <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">{section.title}</h2>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                    {section.people.map((m, idx) => (
-                      <TeamMemberCard key={`${section.title}-${idx}`} {...m} />
-                    ))}
-                  </div>
+                  ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                      {section.people.map((m, idx) => (
+                        <TeamMemberCard key={`${section.title}-${idx}`} {...m} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )
           )}

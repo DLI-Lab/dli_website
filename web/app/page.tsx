@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div>
       {/* ===== 섹션 1: 히어로 ===== */}
-      <section className="min-h-[calc(85vh-4rem)] lg:min-h-[calc(85vh-5rem)] relative">
+      <section className="min-h-[92vh] relative">
         {/* 배경 그라데이션 + 패턴 */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-100/40 to-indigo-100/50"></div>
@@ -76,14 +76,14 @@ export default function Home() {
 
       {/* ===== 섹션 2: About & Research (탭) ===== */}
       <section className="relative bg-white">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-16 lg:pb-24">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-12 lg:pb-16">
           <AboutResearchTabs />
         </div>
       </section>
 
       {/* ===== 섹션 3: Lab News ===== */}
       <section className="relative bg-slate-50">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-16 lg:pb-24 h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] max-h-[900px] lg:max-h-[980px] overflow-y-auto lg:overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-12 lg:pb-16 h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] max-h-[800px] lg:max-h-[850px] overflow-y-auto lg:overflow-hidden">
           <NewsSection />
         </div>
       </section>

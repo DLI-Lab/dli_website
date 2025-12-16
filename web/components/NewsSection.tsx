@@ -35,7 +35,6 @@ interface NewsItem {
   codeUrl?: string | null;
   datasetUrl?: string | null;
   papers?: AcademicPaper[];
-  description?: string[] | null;
   image?: {
     asset: {
       _id: string;
@@ -141,7 +140,7 @@ export default function NewsSection() {
                   <button
                     onClick={() => setSelectedId(item._id)}
                     aria-selected={isSelected}
-                    className={`relative w-full text-left px-4 py-4 rounded-none transition-colors duration-200 flex items-start gap-4 group cursor-pointer ${
+                    className={`relative w-full text-left px-4 py-4 rounded-none transition-colors duration-200 flex items-center gap-4 group cursor-pointer ${
                       isSelected ? "bg-transparent" : "bg-transparent"
                     }`}
                   >
@@ -152,7 +151,7 @@ export default function NewsSection() {
                       }`}
                     />
 
-                    <div className="flex flex-col gap-1 pl-2">
+                    <div className="flex flex-col gap-1 pl-2 flex-1">
                       <div className="flex items-center gap-3">
                         {/* 날짜 */}
                         <span className="text-sm lg:text-base tracking-wide text-gray-500 font-medium tabular-nums shrink-0">
@@ -177,6 +176,28 @@ export default function NewsSection() {
                       >
                         {item.summary}
                       </span>
+                    </div>
+
+                    {/* 클릭 가능 아이콘 */}
+                    <div className="flex-shrink-0 self-center">
+                      <svg
+                        className={`w-5 h-5 transition-all duration-200 ${
+                          isSelected
+                            ? "text-gray-900 translate-x-1"
+                            : "text-gray-400 group-hover:text-gray-600 group-hover:translate-x-0.5"
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
                     </div>
                   </button>
                 </li>

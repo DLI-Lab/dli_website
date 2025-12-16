@@ -16,6 +16,72 @@ export const publicationsQuery = defineQuery(`
   }
 `);
 
+export const blogsQuery = defineQuery(`
+  *[_type == "blog" && defined(slug.current)] | order(publishedAt desc, _createdAt desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    category,
+    readingTime,
+    authorRef->{
+      _id,
+      name,
+      role,
+      "handle": email,
+      image {
+        asset->{
+          _id,
+          url
+        }
+      }
+    },
+    hideAuthorProfileImage,
+    authorAvatarOverride {
+      asset->{
+        _id,
+        url
+      }
+    },
+    heroImage {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      },
+      caption
+    },
+    thumbnail {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      }
+    },
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata {
+            lqip,
+            dimensions
+          }
+        }
+      }
+    }
+  }
+`);
+
 export const galleriesQuery = defineQuery(`
   *[_type == "gallery"] | order(date desc) {
     _id,

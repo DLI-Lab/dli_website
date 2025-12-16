@@ -52,16 +52,18 @@ function ResearchContent({ areas }: { areas: ResearchArea[] }) {
             index === areas.length - 1 ? "" : "border-b border-gray-200"
           }`}
         >
-          {/* 이미지 */}
-          <div className="w-full lg:w-96 flex-shrink-0">
-            <div className="w-full h-44 lg:h-48 overflow-hidden rounded-xl bg-gray-100">
-              <img 
-                src={area.image?.asset?.url || "/placeholder.png"} 
-                alt={area.title} 
-                className="w-full h-full object-cover" 
-              />
+          {/* 이미지 - 이미지가 있을 때만 렌더링 */}
+          {area.image?.asset?.url && (
+            <div className="w-full lg:w-96 flex-shrink-0">
+              <div className="w-full h-44 lg:h-48 overflow-hidden rounded-xl bg-gray-100">
+                <img 
+                  src={area.image.asset.url} 
+                  alt={area.title} 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 텍스트 */}
           <div className="flex-1 flex flex-col gap-3 items-start">
@@ -124,7 +126,7 @@ export default function AboutResearchTabs() {
       </div>
 
       {/* 탭 콘텐츠 */}
-      <div className="relative overflow-hidden pr-10 h-[720px]">
+      <div className="relative overflow-hidden pr-10 h-[600px]">
         {/* 슬라이드 인디케이터 화살표 (우측 중앙) */}
         <button
           aria-label={activeTab === "about" ? "Go to Research" : "Go to About"}
