@@ -22,19 +22,19 @@ function SponsorSet({ ariaHidden = false }: { ariaHidden?: boolean }) {
             className="flex-shrink-0 flex items-center justify-center"
           >
             <div className={
-              isLGElectronics ? "h-32 lg:h-40 w-auto" :
-              isThetaCloud ? "h-24 lg:h-28 w-auto" :
-              isICT ? "h-20 lg:h-24 w-auto" :
-              "h-16 lg:h-20 w-auto"
+              isLGElectronics ? "h-24 lg:h-32 w-auto" :
+              isThetaCloud ? "h-20 lg:h-24 w-auto" :
+              isICT ? "h-16 lg:h-20 w-auto" :
+              "h-12 lg:h-16 w-auto"
             }>
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
                 className={`h-full w-auto object-contain ${
-                  isLGElectronics ? "max-w-[360px] lg:max-w-[450px]" :
-                  isThetaCloud ? "max-w-[280px] lg:max-w-[340px]" :
-                  isICT ? "max-w-[220px] lg:max-w-[280px]" :
-                  "max-w-[180px] lg:max-w-[220px]"
+                  isLGElectronics ? "max-w-[290px] lg:max-w-[360px]" :
+                  isThetaCloud ? "max-w-[225px] lg:max-w-[270px]" :
+                  isICT ? "max-w-[175px] lg:max-w-[225px]" :
+                  "max-w-[145px] lg:max-w-[175px]"
                 }`}
               />
             </div>
