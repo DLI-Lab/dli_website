@@ -249,3 +249,4 @@ export default async function BlogDetailPage({
     </main>
   );
 }
+

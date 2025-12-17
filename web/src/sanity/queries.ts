@@ -17,7 +17,7 @@ export const publicationsQuery = defineQuery(`
 `);
 
 export const blogsQuery = defineQuery(`
-  *[_type == "blog" && defined(slug.current)] | order(publishedAt desc, _createdAt desc) {
+  *[_type == "blog" && defined(slug.current) && hidden != true] | order(publishedAt desc, _createdAt desc) {
     _id,
     title,
     "slug": slug.current,

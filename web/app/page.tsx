@@ -39,9 +39,9 @@ export default function Home() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 <span className="block">Data &amp; Language</span>
                 <span className="block">Intelligence Lab</span>
-                <span className="block text-2xl sm:text-3xl lg:text-4xl text-gray-500 font-semibold mt-2">@ Yonsei University</span>
+                <span className="block text-3xl sm:text-4xl lg:text-[3.25rem] text-gray-500 mt-2">@ Yonsei University</span>
               </h1>
-              <p className="text-base sm:text-lg text-gray-500 font-medium">
+              <p className="text-lg sm:text-xl lg:text-2xl text-gray-500 font-medium">
                 Empowering AI with real-world data & human language insights
               </p>
             </div>

@@ -40,6 +40,13 @@ export const blogType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'hidden',
+      title: 'Hide from website',
+      type: 'boolean',
+      description: '체크하면 웹사이트에서 이 글이 보이지 않습니다 (아카이브용)',
+      initialValue: false,
+    }),
+    defineField({
       name: 'category',
       title: 'Category',
       type: 'string',
@@ -147,6 +154,14 @@ export const blogType = defineType({
       title: 'title',
       subtitle: 'category',
       media: 'thumbnail',
+      hidden: 'hidden',
+    },
+    prepare({title, subtitle, media, hidden}) {
+      return {
+        title: hidden ? `🔒 ${title}` : title,
+        subtitle: hidden ? `[숨김] ${subtitle || ''}` : subtitle,
+        media,
+      }
     },
   },
 })
