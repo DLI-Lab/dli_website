@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 /**
  * 블로그 카드 컴포넌트
  * 재사용 가능한 블로그 포스트 카드
@@ -44,9 +46,9 @@ export default function BlogCard({
       );
     }
     return (
-      <a href={href} className="group block">
+      <Link href={href} className="group block">
         {children}
-      </a>
+      </Link>
     );
   };
 

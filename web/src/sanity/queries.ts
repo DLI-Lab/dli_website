@@ -143,6 +143,72 @@ export const researchAreasQuery = defineQuery(`
   }
 `);
 
+export const blogBySlugQuery = defineQuery(`
+  *[_type == "blog" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    category,
+    readingTime,
+    authorRef->{
+      _id,
+      name,
+      role,
+      "handle": email,
+      image {
+        asset->{
+          _id,
+          url
+        }
+      }
+    },
+    hideAuthorProfileImage,
+    authorAvatarOverride {
+      asset->{
+        _id,
+        url
+      }
+    },
+    heroImage {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      },
+      caption
+    },
+    thumbnail {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      }
+    },
+    body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->{
+          _id,
+          url,
+          metadata {
+            lqip,
+            dimensions
+          }
+        }
+      }
+    }
+  }
+`);
+
 export const newsQuery = defineQuery(`
   *[_type == "news"] | order(date desc) {
     _id,

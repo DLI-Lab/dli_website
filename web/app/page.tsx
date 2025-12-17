@@ -1,6 +1,7 @@
 import AboutResearchTabs from "@/components/AboutResearchTabs";
 import SponsorBelt from "@/components/SponsorBelt";
 import NewsSection from "@/components/NewsSection";
+import MobileImageCarousel from "@/components/MobileImageCarousel";
 import type { ReactNode } from "react";
 
 /**
@@ -47,11 +48,14 @@ export default function Home() {
 
             {/* 오른쪽 이미지 영역 */}
             <div className="w-full">
-              {/* Mobile: stack images (no overlap) */}
+              {/* Mobile: 스와이프 캐러셀 */}
               <div className="sm:hidden">
-                <div className="w-full h-140 overflow-hidden rounded-lg shadow-[0_16px_40px_rgba(0,0,0,0.12),0_8px_16px_rgba(0,0,0,0.08)] ring-1 ring-black/5 bg-gray-100">
-                  <img src="/team.png" alt="연구실 모임 사진" className="w-full h-full object-cover" />
-                </div>
+                <MobileImageCarousel
+                  images={[
+                    { src: "/team.png", alt: "연구실 모임 사진" },
+                    { src: "/team2.png", alt: "연구실 단체 사진" },
+                  ]}
+                />
               </div>
 
               {/* >= sm: overlap layout */}
@@ -70,7 +74,7 @@ export default function Home() {
         </div>
 
         {/* 스폰서 로고 벨트 */}
-        <div className="mt-6 lg:mt-8 max-w-[1400px] mx-auto px-6 lg:px-10">
+        <div className="mt-1 lg:mt-8 max-w-[1400px] mx-auto px-6 lg:px-10">
           <SponsorBelt />
         </div>
       </section>
