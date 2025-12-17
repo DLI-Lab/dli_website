@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 
 export const publicationsQuery = defineQuery(`
-  *[_type == "publication"] | order(year desc, venue asc) {
+  *[_type == "publication"] | order(year desc, order asc) {
     _id,
     year,
     title,

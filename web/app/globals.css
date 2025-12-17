@@ -7,7 +7,7 @@
 
 .animate-sponsor-scroll {
   --gap-offset: 2rem; /* half of gap-16 (4rem) */
-  --scroll-duration: 80s;
+  --scroll-duration: 240s;
   width: max-content;
   animation: sponsor-scroll var(--scroll-duration) linear infinite;
 }
@@ -25,7 +25,7 @@
 @media (max-width: 1024px) {
   .animate-sponsor-scroll {
     --gap-offset: 1.5rem; /* half of gap-12 (3rem) */
-    --scroll-duration: 60s;
+    --scroll-duration: 300s;
   }
 }
 

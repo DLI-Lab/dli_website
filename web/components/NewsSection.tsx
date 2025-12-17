@@ -122,15 +122,15 @@ export default function NewsSection() {
     <div className="space-y-4">
       {/* 카테고리 뱃지 (옵션에 따라 숨김) */}
       {!options?.hideCategory && (
-        <div className="mb-4">
-          <span
-            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-              categoryStyles[news.category].bg
-            } ${categoryStyles[news.category].text}`}
-          >
-            {categoryStyles[news.category].label}
-          </span>
-        </div>
+      <div className="mb-4">
+        <span
+          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+            categoryStyles[news.category].bg
+          } ${categoryStyles[news.category].text}`}
+        >
+          {categoryStyles[news.category].label}
+        </span>
+      </div>
       )}
 
       {/* 날짜 */}

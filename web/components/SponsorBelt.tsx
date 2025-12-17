@@ -50,8 +50,9 @@ export default function SponsorBelt() {
     <div className="w-full bg-transparent py-6 lg:py-8 overflow-hidden">
       <div className="relative">
         <div className="flex gap-12 lg:gap-16 animate-sponsor-scroll">
-          <SponsorSet />
-          <SponsorSet ariaHidden />
+          {Array.from({ length: 10 }).map((_, i) => (
+            <SponsorSet key={i} ariaHidden={i > 0} />
+          ))}
         </div>
       </div>
     </div>

@@ -6,6 +6,12 @@ export const publicationType = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: '같은 연도 내 정렬 순서 (낮을수록 먼저 표시)',
+    }),
+    defineField({
       name: 'year',
       type: 'number',
       validation: (rule) => rule.required(),

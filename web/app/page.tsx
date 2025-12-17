@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div>
       {/* ===== 섹션 1: 히어로 ===== */}
-      <section className="min-h-[92vh] relative">
+      <section className="relative">
         {/* 배경 그라데이션 + 패턴 */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-100/40 to-indigo-100/50"></div>
@@ -38,9 +38,10 @@ export default function Home() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 <span className="block">Data &amp; Language</span>
                 <span className="block">Intelligence Lab</span>
+                <span className="block text-2xl sm:text-3xl lg:text-4xl text-gray-500 font-semibold mt-2">@ Yonsei University</span>
               </h1>
               <p className="text-base sm:text-lg text-gray-500 font-medium">
-                Yonsei University, Korea
+                Empowering AI with real-world data & human language insights
               </p>
             </div>
 
@@ -69,17 +70,18 @@ export default function Home() {
         </div>
 
         {/* 스폰서 로고 벨트 */}
-        <div className="mt-6 lg:mt-8">
+        <div className="mt-6 lg:mt-8 max-w-[1400px] mx-auto px-6 lg:px-10">
           <SponsorBelt />
         </div>
       </section>
 
-      {/* ===== 섹션 2: About & Research (탭) ===== */}
+      {/* ===== 섹션 2: About & Research (탭) - 비활성화 =====
       <section className="relative bg-white">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-12 lg:pb-16">
           <AboutResearchTabs />
         </div>
       </section>
+      */}
 
       {/* ===== 섹션 3: Lab News ===== */}
       <section className="relative bg-slate-50">
