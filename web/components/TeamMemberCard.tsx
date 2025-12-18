@@ -4,12 +4,15 @@ export interface TeamMember {
   bio?: string;
   image?: string;
   email?: string;
-  website?: string;
+  github?: string;
+  personalPage?: string;
+  linkedin?: string;
+  weebly?: string;
   researchArea?: string;
   googleScholar?: string;
 }
 
-export default function TeamMemberCard({ name, role, bio, image, email, website, researchArea, googleScholar }: TeamMember) {
+export default function TeamMemberCard({ name, role, bio, image, email, github, personalPage, linkedin, weebly, researchArea, googleScholar }: TeamMember) {
   const src = image || "/placeholder.png";
   const isProfessor = role.toLowerCase().includes("professor") || role.toLowerCase() === "faculty";
   
@@ -17,17 +20,26 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
   // Professor: 125px 높이, 일반: 86px 높이 기준으로 대략 50-60자 이하면 스크롤 불필요
   const needsScroll = bio ? (isProfessor ? bio.length > 150 : bio.length > 100) : false;
 
-  const normalizedWebsite = website ? (website.startsWith("http") ? website : `https://${website}`) : "";
-  const websiteMeta =
-    website && website.toLowerCase().includes("github")
-      ? { label: "GitHub", icon: "/icons/personal_page.png", alt: "GitHub icon" }
-      : website && website.toLowerCase().includes("linkedin")
-      ? { label: "LinkedIn", icon: "/icons/linkedin.png", alt: "LinkedIn icon" }
-      : website && website.toLowerCase().includes("weebly")
-      ? { label: "Weebly", icon: "/icons/weebly.png", alt: "Weebly icon" }
-      : website
-      ? { label: "Website", icon: "/icons/personal_website.png", alt: "Website icon" }
-      : null;
+  // URL 정규화 함수
+  const normalizeUrl = (url: string | undefined): string | undefined => {
+    if (!url) return undefined
+    const trimmed = url.trim()
+    if (!trimmed) return undefined
+    // 이미 http:// 또는 https://로 시작하면 그대로 반환
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed
+    }
+    // 그렇지 않으면 https:// 추가
+    return `https://${trimmed}`
+  }
+
+  // 각 링크 타입별 아이콘 정보 (URL 정규화 적용)
+  const linkItems = [
+    { url: normalizeUrl(github), icon: "/icons/github.png", alt: "GitHub" },
+    { url: normalizeUrl(personalPage), icon: "/icons/personal_page.png", alt: "Personal Page" },
+    { url: normalizeUrl(linkedin), icon: "/icons/linkedin.png", alt: "LinkedIn" },
+    { url: normalizeUrl(weebly), icon: "/icons/weebly.png", alt: "Weebly" },
+  ].filter(item => item.url);
 
   // Professor 카드는 가로형 레이아웃 (이미지 왼쪽, 텍스트 오른쪽) - 더 크게
   if (isProfessor) {
@@ -81,7 +93,7 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
             <div className="flex items-center gap-2.5 h-10">
               {googleScholar && (
                 <a
-                  href={googleScholar}
+                  href={googleScholar.startsWith('http') ? googleScholar : `https://${googleScholar}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-800 hover:border-gray-300 hover:bg-gray-50 transition-colors duration-200"
@@ -89,16 +101,17 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
                   <img src="/icons/google_scholar.png" alt="Google Scholar" className="w-7 h-7" />
                 </a>
               )}
-              {website && (
+              {linkItems.map((item, idx) => (
                 <a
-                  href={normalizedWebsite}
+                  key={idx}
+                  href={item.url}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-800 hover:border-gray-300 hover:bg-gray-50 transition-colors duration-200"
                 >
-                  {websiteMeta && <img src={websiteMeta.icon} alt={websiteMeta.alt} className="w-7 h-7" />}
+                  <img src={item.icon} alt={item.alt} className="w-7 h-7" />
                 </a>
-              )}
+              ))}
             </div>
           </div>
         </div>
@@ -160,16 +173,27 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
         <div className="space-y-3 pt-2 mt-auto">
           <div className="border-t border-gray-200"></div>
           <div className="flex items-center gap-2.5 h-10">
-            {website && (
+            {googleScholar && (
               <a
-                href={normalizedWebsite}
+                href={googleScholar.startsWith('http') ? googleScholar : `https://${googleScholar}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-800 hover:border-gray-300 hover:bg-gray-50 transition-colors duration-200"
               >
-                {websiteMeta && <img src={websiteMeta.icon} alt={websiteMeta.alt} className="w-7 h-7" />}
+                <img src="/icons/google_scholar.png" alt="Google Scholar" className="w-7 h-7" />
               </a>
             )}
+            {linkItems.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-800 hover:border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+              >
+                <img src={item.icon} alt={item.alt} className="w-7 h-7" />
+              </a>
+            ))}
           </div>
         </div>
       </div>

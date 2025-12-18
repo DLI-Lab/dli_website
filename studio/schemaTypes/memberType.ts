@@ -48,12 +48,29 @@ export const memberType = defineType({
       type: 'text',
     }),
     defineField({
-      name: 'website',
+      name: 'github',
       type: 'string',
+      title: 'GitHub',
+    }),
+    defineField({
+      name: 'personalPage',
+      type: 'string',
+      title: 'Personal Page',
+    }),
+    defineField({
+      name: 'linkedin',
+      type: 'string',
+      title: 'LinkedIn',
+    }),
+    defineField({
+      name: 'weebly',
+      type: 'string',
+      title: 'Weebly',
     }),
     defineField({
       name: 'googleScholar',
-      type: 'url',
+      type: 'string',
+      title: 'Google Scholar',
     }),
     defineField({
       name: 'order',

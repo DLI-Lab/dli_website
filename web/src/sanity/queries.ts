@@ -124,7 +124,10 @@ export const membersQuery = defineQuery(`
       }
     },
     bio,
-    website,
+    github,
+    personalPage,
+    linkedin,
+    weebly,
     googleScholar
   }
 `);

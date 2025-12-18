@@ -15,7 +15,10 @@ interface SanityMember {
     };
   };
   bio?: string;
-  website?: string;
+  github?: string;
+  personalPage?: string;
+  linkedin?: string;
+  weebly?: string;
   googleScholar?: string;
 }
 
@@ -51,7 +54,10 @@ function groupMembersByCategory(members: SanityMember[]) {
         bio: member.bio,
         image: member.image?.asset?.url,
         email: member.email,
-        website: member.website,
+        github: member.github,
+        personalPage: member.personalPage,
+        linkedin: member.linkedin,
+        weebly: member.weebly,
         googleScholar: member.googleScholar,
       });
     }
