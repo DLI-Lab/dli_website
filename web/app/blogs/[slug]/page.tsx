@@ -61,6 +61,9 @@ const portableTextComponents: PortableTextComponents = {
     h3: ({ children }) => (
       <h3 className="mt-8 mb-3 text-xl font-semibold text-gray-900">{children}</h3>
     ),
+    h4: ({ children }) => (
+      <h4 className="mt-6 mb-2 text-lg font-semibold text-gray-900">{children}</h4>
+    ),
     normal: ({ children, value }) => {
       const isHorizontalRule =
         Array.isArray((value as any)?.children) &&
@@ -70,6 +73,37 @@ const portableTextComponents: PortableTextComponents = {
 
       if (isHorizontalRule) {
         return <hr className="my-8 border-t border-gray-200" />;
+      }
+
+      const textContent = (value as any)?.children?.[0]?.text;
+      if (typeof textContent === "string") {
+        if (textContent.startsWith("# ")) {
+          let content = children;
+          if (Array.isArray(children) && typeof children[0] === "string") {
+            content = [children[0].replace(/^#\s+/, ""), ...children.slice(1)];
+          } else if (typeof children === "string") {
+            content = children.replace(/^#\s+/, "");
+          }
+          return <h1 className="mt-12 mb-5 text-3xl font-bold text-gray-900">{content}</h1>;
+        }
+        if (textContent.startsWith("## ")) {
+          let content = children;
+          if (Array.isArray(children) && typeof children[0] === "string") {
+            content = [children[0].replace(/^##\s+/, ""), ...children.slice(1)];
+          } else if (typeof children === "string") {
+            content = children.replace(/^##\s+/, "");
+          }
+          return <h2 className="mt-10 mb-4 text-2xl font-semibold text-gray-900">{content}</h2>;
+        }
+        if (textContent.startsWith("### ")) {
+          let content = children;
+          if (Array.isArray(children) && typeof children[0] === "string") {
+            content = [children[0].replace(/^###\s+/, ""), ...children.slice(1)];
+          } else if (typeof children === "string") {
+            content = children.replace(/^###\s+/, "");
+          }
+          return <h3 className="mt-8 mb-3 text-xl font-semibold text-gray-900">{content}</h3>;
+        }
       }
 
       return <p className="leading-[2] mb-6 text-gray-800">{children}</p>;

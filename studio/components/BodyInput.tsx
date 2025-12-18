@@ -22,6 +22,9 @@ export function BodyInput(props: ArrayOfObjectsInputProps) {
       h3: ({children}) => (
         <h3 style={{fontSize: '1.25rem', fontWeight: 'bold', margin: '1rem 0 0.5rem'}}>{children}</h3>
       ),
+      h4: ({children}) => (
+        <h4 style={{fontSize: '1.1rem', fontWeight: 'bold', margin: '0.75rem 0 0.5rem'}}>{children}</h4>
+      ),
       normal: ({children, value}) => {
         const isHorizontalRule =
           Array.isArray((value as any)?.children) &&

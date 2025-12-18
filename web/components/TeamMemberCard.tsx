@@ -20,7 +20,7 @@ export default function TeamMemberCard({ name, role, bio, image, email, website,
   const normalizedWebsite = website ? (website.startsWith("http") ? website : `https://${website}`) : "";
   const websiteMeta =
     website && website.toLowerCase().includes("github")
-      ? { label: "GitHub", icon: "/icons/github.png", alt: "GitHub icon" }
+      ? { label: "GitHub", icon: "/icons/personal_page.png", alt: "GitHub icon" }
       : website && website.toLowerCase().includes("linkedin")
       ? { label: "LinkedIn", icon: "/icons/linkedin.png", alt: "LinkedIn icon" }
       : website && website.toLowerCase().includes("weebly")
