@@ -22,7 +22,8 @@ export const blogType = defineType({
       title: 'Slug',
       type: 'slug',
       options: {source: 'title', maxLength: 96},
-      description: 'URL 경로에 사용되는 고유 ID입니다. "Generate" 버튼을 눌러 제목을 기반으로 자동 생성할 수 있습니다.',
+      description:
+        'URL 경로에 사용되는 고유 ID입니다. "Generate" 버튼을 눌러 제목을 기반으로 자동 생성할 수 있습니다.',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -144,9 +145,16 @@ export const blogType = defineType({
     defineField({
       name: 'tags',
       title: 'Tags',
-      type: 'array',
-      of: [{type: 'string'}],
-      validation: (rule) => rule.max(10),
+      type: 'text',
+      rows: 2,
+      description: '콤마로 구분된 태그 목록을 입력하세요 (예: LLM, RAG, Agent).',
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seo',
+      description:
+        '검색/공유용 메타 정보를 수동으로 덮어쓰고 싶을 때만 사용하세요. 비워두면 제목/요약/태그로 자동 생성됩니다.',
     }),
   ],
   preview: {

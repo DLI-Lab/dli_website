@@ -30,6 +30,7 @@ type SanityBlog = {
   heroImage?: SanityImage;
   thumbnail?: SanityImage;
   body?: any[];
+  tags?: string;
 };
 
 function formatDate(value?: string) {
@@ -37,6 +38,14 @@ function formatDate(value?: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" });
+}
+
+function parseTags(tags?: string): string[] {
+  if (!tags) return [];
+  return tags
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 }
 
 function normalizeBlog(post: SanityBlog): BlogPostForClient | null {
@@ -69,6 +78,7 @@ function normalizeBlog(post: SanityBlog): BlogPostForClient | null {
     heroImageCaption: post.heroImage?.caption,
     thumbnail: post.thumbnail?.asset?.url,
     body: post.body || [],
+    tags: parseTags(post.tags),
   };
 }
 

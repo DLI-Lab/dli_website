@@ -3,12 +3,58 @@ import SponsorBelt from "@/components/SponsorBelt";
 import NewsSection from "@/components/NewsSection";
 import MobileImageCarousel from "@/components/MobileImageCarousel";
 import type { ReactNode } from "react";
+import { Metadata } from "next";
+import { getPageMeta } from "@/src/sanity/seoQueries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageMeta = await getPageMeta('/');
+
+  if (!pageMeta?.seo) {
+    return {};
+  }
+
+  const { metaTitle, metaDescription, keywords, openGraphImage } = pageMeta.seo;
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    keywords: keywords,
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      images: openGraphImage ? [{ url: openGraphImage, width: 1200, height: 630 }] : undefined,
+    },
+  };
+}
 
 /**
  * 메인 랜딩 페이지
  */
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ResearchOrganization',
+    name: 'Data & Language Intelligence Lab',
+    alternateName: 'DLI Lab',
+    url: 'https://dli.yonsei.ac.kr',
+    logo: 'https://dli.yonsei.ac.kr/team.png',
+    email: 'donalee@yonsei.ac.kr',
+    department: {
+      '@type': 'Organization',
+      name: 'Yonsei University',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Yonsei Engineering Research Park (YERP) 425B, 50 Yonsei-ro',
+      addressLocality: 'Seodaemun-gu',
+      addressRegion: 'Seoul',
+      postalCode: '03722',
+      addressCountry: 'KR'
+    },
+    description: 'Empowering AI with real-world data & human language insights.',
+  };
+
   const HighlightLink = ({ href, children }: { href: string; children: ReactNode }) => (
     <a href={href} className="group relative inline-block px-1 font-medium text-blue-700 hover:text-blue-800 transition-colors">
       <span
@@ -21,6 +67,10 @@ export default function Home() {
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ===== 섹션 1: 히어로 ===== */}
       <section className="relative">
         {/* 배경 그라데이션 + 패턴 */}

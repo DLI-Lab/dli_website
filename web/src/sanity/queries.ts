@@ -78,7 +78,8 @@ export const blogsQuery = defineQuery(`
           }
         }
       }
-    }
+    },
+    tags
   }
 `);
 
@@ -206,6 +207,17 @@ export const blogBySlugQuery = defineQuery(`
             lqip,
             dimensions
           }
+        }
+      }
+    },
+    tags,
+    seo {
+      metaTitle,
+      metaDescription,
+      keywords,
+      openGraphImage {
+        asset->{
+          url
         }
       }
     }

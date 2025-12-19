@@ -19,6 +19,7 @@ export type BlogPostForClient = {
   heroImageCaption?: string;
   thumbnail?: string;
   body: any[];
+  tags: string[];
 };
 
 export default function BlogsPageClient({ posts }: { posts: BlogPostForClient[] }) {
@@ -65,6 +66,23 @@ export default function BlogsPageClient({ posts }: { posts: BlogPostForClient[] 
                       />
                     </div>
                   </figure>
+                  {latestPost.tags.length > 0 && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {latestPost.tags.slice(0, 4).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-block px-2.5 py-1 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-full"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                      {latestPost.tags.length > 3 && (
+                        <span className="inline-block px-2.5 py-1 text-xs font-medium text-gray-500">
+                          +{latestPost.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
                   <div className="space-y-3">
@@ -80,7 +98,7 @@ export default function BlogsPageClient({ posts }: { posts: BlogPostForClient[] 
                     <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
                       {latestPost.title}
                     </h2>
-                    <p className="text-base lg:text-lg text-gray-600 leading-relaxed">
+                    <p className="text-base lg:text-lg text-gray-600 leading-relaxed line-clamp-4">
                       {latestPost.description || "No description available."}
                     </p>
                     <div className="flex items-center gap-3 pt-2">
@@ -120,6 +138,7 @@ export default function BlogsPageClient({ posts }: { posts: BlogPostForClient[] 
                   date={post.date}
                   thumbnail={post.thumbnail || post.heroImage}
                   href={`/blogs/${post.slug}`}
+                  tags={post.tags}
                 />
               ))}
             </div>

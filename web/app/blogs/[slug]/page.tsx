@@ -6,6 +6,7 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import imageUrlBuilder from "@sanity/image-url";
 import { client } from "@/src/sanity/client";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 const builder = imageUrlBuilder(client);
 
@@ -41,6 +42,17 @@ type SanityBlog = {
   heroImage?: SanityImage;
   thumbnail?: SanityImage;
   body?: any[];
+  tags?: string | string[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: string; // 콤마로 구분된 키워드
+    openGraphImage?: {
+      asset?: {
+        url?: string;
+      };
+    };
+  };
 };
 
 function formatDate(value?: string) {
@@ -48,6 +60,98 @@ function formatDate(value?: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" });
+}
+
+function normalizeKeywordsFromSeo(raw?: string): string[] {
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((k) => k.trim())
+    .map((k) => (k.startsWith("#") ? k.slice(1) : k))
+    .filter(Boolean);
+}
+
+function normalizeKeywordsFromTags(tags?: string | string[]): string[] {
+  if (!tags) return [];
+  if (Array.isArray(tags)) {
+    return tags
+      .map((k) => k.trim())
+      .map((k) => (k.startsWith("#") ? k.slice(1) : k))
+      .filter(Boolean);
+  }
+  return tags
+    .split(",")
+    .map((k) => k.trim())
+    .map((k) => (k.startsWith("#") ? k.slice(1) : k))
+    .filter(Boolean);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const client = getClient(false);
+  const post = await client.fetch<SanityBlog | null>(blogBySlugQuery, { slug });
+
+  if (!post || !post.title) {
+    return {};
+  }
+
+  // 1) 제목: seo.metaTitle > title
+  const title = post.seo?.metaTitle?.trim() || post.title.trim();
+
+  // 2) 설명: seo.metaDescription > excerpt > body 첫 문단
+  let description = post.seo?.metaDescription?.trim() || post.excerpt?.trim() || "";
+
+  if (!description && Array.isArray(post.body)) {
+    const firstBlock = post.body.find(
+      (b: any) => b._type === "block" && Array.isArray(b.children)
+    );
+    const firstText = firstBlock?.children?.map((c: any) => c.text).join(" ");
+    if (firstText) {
+      description = firstText.slice(0, 160);
+    }
+  }
+
+  // 3) 키워드: seo.keywords(콤마, #허용) > tags(콤마 or 배열, #허용)
+  let keywords: string[] | undefined;
+
+  const seoKeywords = normalizeKeywordsFromSeo(post.seo?.keywords);
+  const tagKeywords = normalizeKeywordsFromTags(post.tags);
+
+  if (seoKeywords.length > 0) {
+    keywords = seoKeywords;
+  } else if (tagKeywords.length > 0) {
+    keywords = tagKeywords;
+  }
+
+  // 4) OG 이미지: seo.openGraphImage > heroImage > thumbnail > (없으면 layout 기본값 사용)
+  const ogFromSeo = post.seo?.openGraphImage?.asset?.url;
+  const ogFromHero = post.heroImage?.asset?.url;
+  const ogFromThumb = post.thumbnail?.asset?.url;
+
+  const ogImage = ogFromSeo || ogFromHero || ogFromThumb;
+
+  return {
+    title,
+    description: description || undefined,
+    keywords,
+    openGraph: {
+      title,
+      description: description || undefined,
+      images: ogImage
+        ? [
+            {
+              url: ogImage,
+              width: 1200,
+              height: 630,
+            },
+          ]
+        : undefined,
+    },
+  };
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -202,6 +306,7 @@ export default async function BlogDetailPage({
   const category = post.category || "Blog";
   const heroImage = post.heroImage?.asset?.url;
   const heroImageCaption = post.heroImage?.caption;
+  const tags = normalizeKeywordsFromTags(post.tags);
 
   return (
     <main className="bg-white min-h-screen">
@@ -230,6 +335,18 @@ export default async function BlogDetailPage({
           <div className="space-y-4">
             <p className="text-sm font-semibold text-sky-600 uppercase tracking-wide">{category}</p>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight text-gray-900">{post.title}</h1>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-block px-3 py-1 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-full"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="flex flex-wrap items-center gap-4 text-base text-gray-600">
               {authorAvatar ? (
                 <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200 ring-1 ring-gray-100">
@@ -283,4 +400,3 @@ export default async function BlogDetailPage({
     </main>
   );
 }
-

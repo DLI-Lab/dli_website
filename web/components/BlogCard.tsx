@@ -20,6 +20,8 @@ export interface BlogCardProps {
   authorAvatar?: string;
   /** 작성 날짜 */
   date: string;
+  /** 태그 목록 */
+  tags?: string[];
   /** 링크 URL (모달 등 클릭 처리 시 생략) */
   href?: string;
   /** 카드 클릭 핸들러 */
@@ -34,6 +36,7 @@ export default function BlogCard({
   author,
   authorAvatar,
   date,
+  tags = [],
   href = "#",
   onClick,
 }: BlogCardProps) {
@@ -63,6 +66,25 @@ export default function BlogCard({
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
+
+        {/* 태그 (이미지 아래) */}
+        {tags.length > 0 && (
+          <div className="mt-4 mb-3 flex flex-wrap gap-1.5">
+            {tags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="inline-block px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-full"
+              >
+                #{tag}
+              </span>
+            ))}
+            {tags.length > 3 && (
+              <span className="inline-block px-2 py-0.5 text-xs font-medium text-gray-500">
+                +{tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* 콘텐츠 */}
         <div className="flex flex-col flex-1">
