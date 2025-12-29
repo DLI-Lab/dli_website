@@ -92,6 +92,7 @@ export const galleriesQuery = defineQuery(`
     info,
     location,
     images[] {
+      _key,
       asset->{
         _id,
         url,
@@ -101,6 +102,7 @@ export const galleriesQuery = defineQuery(`
       }
     },
     videos[] {
+      _key,
       asset->{
         _id,
         url,

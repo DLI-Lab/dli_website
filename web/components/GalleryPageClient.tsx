@@ -5,6 +5,7 @@ import GalleryCard from "@/components/GalleryCard";
 import GalleryModal from "@/components/GalleryModal";
 
 interface GalleryImage {
+  _key?: string;
   asset: {
     _id: string;
     url: string;
@@ -18,6 +19,7 @@ interface GalleryImage {
 }
 
 interface GalleryVideo {
+  _key?: string;
   asset: {
     _id: string;
     url: string;
