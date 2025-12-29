@@ -13,5 +13,3 @@ export function PortableTextImagePreview(props: PreviewProps) {
     </Flex>
   )
 }
-
-

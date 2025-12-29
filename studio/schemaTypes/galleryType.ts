@@ -33,7 +33,6 @@ export const galleryType = defineType({
       type: 'array',
       of: [{type: 'image', options: {hotspot: true}}],
       options: {
-        layout: 'grid',
         sortable: true,
       },
       components: {
