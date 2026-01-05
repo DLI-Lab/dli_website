@@ -1,4 +1,21 @@
+import type { ReactNode } from "react";
+
 export default function ApplyPage() {
+  const HighlightLink = ({ href, children }: { href: string; children: ReactNode }) => (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer noopener" : undefined}
+      className="group relative inline-block px-1 font-medium text-blue-700 hover:text-blue-800 transition-colors"
+    >
+      <span
+        aria-hidden
+        className="absolute inset-x-0 bottom-[0.18em] h-[0.72em] rounded-sm -skew-x-12 bg-sky-200/70 transition-colors group-hover:bg-sky-300/70"
+      />
+      <span className="relative">{children}</span>
+    </a>
+  );
+
   const HighlightTitle = ({ children }: { children: React.ReactNode }) => (
     <span className="relative inline-block px-2">
       <span
@@ -69,6 +86,10 @@ export default function ApplyPage() {
                 </div>
                 <p className="font-semibold text-gray-700">
                   Please make sure to copy the HR Admin when sending any contact emails.
+                </p>
+                <p className="mt-3">
+                  💬 <span className="font-semibold">Quick Questions?</span> Ask our{" "}
+                  <HighlightLink href="https://wehere.ai/chat/yonsei-dli">AI Assistant</HighlightLink>
                 </p>
               </div>
             </div>
