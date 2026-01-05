@@ -1,15 +1,55 @@
-import {Box, Button, Dialog, Card} from '@sanity/ui'
-import {ArrayOfObjectsInputProps, useClient} from 'sanity'
+import {Box, Button, Dialog, Card, TextArea, Flex, Stack} from '@sanity/ui'
+import {ArrayOfObjectsInputProps, useClient, set, insert} from 'sanity'
 import {useState} from 'react'
 import {PortableText, PortableTextComponents} from '@portabletext/react'
 import imageUrlBuilder from '@sanity/image-url'
+import {markdownToPortableText} from '../utils/markdownToPortableText'
 
 export function BodyInput(props: ArrayOfObjectsInputProps) {
   const [open, setOpen] = useState(false)
+  const [markdownOpen, setMarkdownOpen] = useState(false)
+  const [markdownText, setMarkdownText] = useState('')
+  const [isConverting, setIsConverting] = useState(false)
   const client = useClient({apiVersion: '2024-01-01'})
   const builder = imageUrlBuilder(client)
 
   const urlFor = (source: any) => builder.image(source)
+
+  const handleMarkdownImport = async () => {
+    if (!markdownText.trim()) {
+      alert('마크다운 텍스트를 입력해주세요.')
+      return
+    }
+
+    setIsConverting(true)
+    try {
+      const portableTextBlocks = await markdownToPortableText(markdownText)
+
+      if (!portableTextBlocks || portableTextBlocks.length === 0) {
+        alert('변환된 콘텐츠가 없습니다.')
+        setIsConverting(false)
+        return
+      }
+
+      // Use Sanity's patch operations for proper array handling
+      const existingBlocks = Array.isArray(props.value) ? props.value : []
+      const newBlocks = [...existingBlocks, ...portableTextBlocks]
+
+      // Use set() patch to update the entire array
+      props.onChange(set(newBlocks))
+
+      // Clear and close dialog
+      setMarkdownText('')
+      setMarkdownOpen(false)
+
+      alert('마크다운이 성공적으로 변환되어 추가되었습니다.')
+    } catch (error) {
+      console.error('Markdown conversion error:', error)
+      alert('마크다운 변환 중 오류가 발생했습니다: ' + (error as Error).message)
+    } finally {
+      setIsConverting(false)
+    }
+  }
 
   const ptComponents: PortableTextComponents = {
     block: {
@@ -60,16 +100,8 @@ export function BodyInput(props: ArrayOfObjectsInputProps) {
       ),
     },
     marks: {
-      link: ({children, value}) => (
-        <a
-          href={value?.href}
-          style={{color: 'blue', textDecoration: 'underline'}}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {children}
-        </a>
-      ),
+      strong: ({children}) => <strong>{children}</strong>,
+      em: ({children}) => <em>{children}</em>,
       code: ({children}) => (
         <code
           style={{
@@ -81,6 +113,18 @@ export function BodyInput(props: ArrayOfObjectsInputProps) {
         >
           {children}
         </code>
+      ),
+      underline: ({children}) => <u>{children}</u>,
+      'strike-through': ({children}) => <s>{children}</s>,
+      link: ({children, value}) => (
+        <a
+          href={value?.href}
+          style={{color: 'blue', textDecoration: 'underline'}}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {children}
+        </a>
       ),
     },
     types: {
@@ -140,14 +184,68 @@ export function BodyInput(props: ArrayOfObjectsInputProps) {
       {props.renderDefault(props)}
 
       <Box padding={3}>
-        <Button
-          text="Preview Blog Content"
-          mode="ghost"
-          tone="primary"
-          onClick={() => setOpen(true)}
-          style={{width: '100%', textAlign: 'center'}}
-        />
+        <Flex gap={2}>
+          <Button
+            text="Import from Markdown"
+            mode="ghost"
+            tone="caution"
+            onClick={() => setMarkdownOpen(true)}
+            style={{flex: 1}}
+          />
+          <Button
+            text="Preview Blog Content"
+            mode="ghost"
+            tone="primary"
+            onClick={() => setOpen(true)}
+            style={{flex: 1}}
+          />
+        </Flex>
       </Box>
+
+      {markdownOpen && (
+        <Dialog
+          header="Import from Markdown"
+          onClose={() => {
+            setMarkdownOpen(false)
+            setMarkdownText('')
+          }}
+          width={2}
+          id="markdown-import-dialog"
+        >
+          <Box padding={4}>
+            <Stack space={4}>
+              <div>
+                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 'bold'}}>
+                  Markdown Content
+                </label>
+                <TextArea
+                  value={markdownText}
+                  onChange={(event) => setMarkdownText(event.currentTarget.value)}
+                  placeholder="마크다운을 여기에 붙여넣으세요. 제목(#), 굵은텍스트(**), 이탤릭(*), 코드(`) 등을 지원합니다."
+                  style={{minHeight: '300px', fontFamily: 'monospace', fontSize: '0.9rem'}}
+                />
+              </div>
+              <Flex gap={2} justify="flex-end">
+                <Button
+                  text="Cancel"
+                  mode="ghost"
+                  onClick={() => {
+                    setMarkdownOpen(false)
+                    setMarkdownText('')
+                  }}
+                  disabled={isConverting}
+                />
+                <Button
+                  text={isConverting ? 'Converting...' : 'Import'}
+                  tone="positive"
+                  onClick={handleMarkdownImport}
+                  disabled={isConverting || !markdownText.trim()}
+                />
+              </Flex>
+            </Stack>
+          </Box>
+        </Dialog>
+      )}
 
       {open && (
         <Dialog

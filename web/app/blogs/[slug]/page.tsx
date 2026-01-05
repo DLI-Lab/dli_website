@@ -236,9 +236,13 @@ const portableTextComponents: PortableTextComponents = {
         href={value?.href}
         target={value?.href?.startsWith("http") ? "_blank" : undefined}
         rel={value?.href?.startsWith("http") ? "noreferrer noopener" : undefined}
-        className="text-blue-600 underline underline-offset-4 hover:text-blue-800"
+        className="group relative inline-block px-1 font-medium text-blue-700 hover:text-blue-800 transition-colors"
       >
-        {children}
+        <span
+          aria-hidden
+          className="absolute inset-x-0 bottom-[0.18em] h-[0.72em] rounded-sm -skew-x-12 bg-sky-200/70 transition-colors group-hover:bg-sky-300/70"
+        />
+        <span className="relative">{children}</span>
       </a>
     ),
     code: ({ children }) => (
