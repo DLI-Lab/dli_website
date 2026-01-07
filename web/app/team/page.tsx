@@ -78,8 +78,8 @@ export default async function TeamPage() {
     { title: "PhD", people: phd },
     { title: "MS/PhD", people: msPhd },
     { title: "Master", people: master },
-    { title: "Undergrad", people: undergrad },
     { title: "Industry Researchers", people: industryResearchers },
+    { title: "Undergrad", people: undergrad },
     { title: "Collaborators", people: collaborators },
     { title: "Alumni", people: alumni },
   ];
