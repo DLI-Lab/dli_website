@@ -1,5 +1,12 @@
 import { defineQuery } from "next-sanity";
 
+export const membersForLookupQuery = defineQuery(`
+  *[_type == "member"] {
+    name,
+    "imageUrl": image.asset->url
+  }
+`);
+
 export const publicationsQuery = defineQuery(`
   *[_type == "publication"] | order(year desc, order asc, _createdAt desc) {
     _id,
@@ -9,6 +16,8 @@ export const publicationsQuery = defineQuery(`
     authors,
     tags,
     image,
+    "imageUrl": image.asset->url,
+    "demoThumbnailUrl": demoThumbnail.asset->url,
     paperUrl,
     codeUrl,
     demoUrl,

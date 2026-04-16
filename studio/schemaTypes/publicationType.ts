@@ -41,6 +41,12 @@ export const publicationType = defineType({
       type: 'image',
     }),
     defineField({
+      name: 'demoThumbnail',
+      title: 'Demo Thumbnail',
+      type: 'image',
+      description: 'Demo 페이지에서만 사용할 썸네일. 없으면 Demo 페이지는 image → YouTube 썸네일 순으로 폴백',
+    }),
+    defineField({
       name: 'paperUrl',
       type: 'url',
     }),
