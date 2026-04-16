@@ -249,17 +249,6 @@ export default function Home() {
                   As a research group member, you can expect mentorship and guidance from the research group leader and senior members of the group. We offer regular group meetings, one-on-one meetings, and training opportunities from the support of our members.
                 </p>
               </div>
-
-              <div className="border-b border-gray-200 pb-4">
-                <h3 className="text-base lg:text-lg font-semibold text-gray-900">
-                  I have more questions. How can I get more information?
-                </h3>
-                <p className="mt-2 text-base lg:text-lg text-gray-600 leading-relaxed">
-                  If you have additional questions, feel free to ask our{" "}
-                  <HighlightLink href="https://wehere.ai/chat/yonsei-dli">AI Assistant</HighlightLink>, or contact us
-                  directly via email through the <HighlightLink href="/apply">Apply</HighlightLink> page.
-                </p>
-              </div>
             </div>
           </div>
         </div>
