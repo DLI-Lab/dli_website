@@ -65,23 +65,23 @@ export default async function DemoPage() {
     }
   }
 
-  const demos: DemoItem[] = publications
-    .filter((p) => p.demoUrl)
-    .map((p) => {
-      const videoId = extractYouTubeId(p.demoUrl as string);
-      if (!videoId) return null;
+  const demos: DemoItem[] = publications.flatMap((p) => {
+    if (!p.demoUrl) return [];
+    const videoId = extractYouTubeId(p.demoUrl);
+    if (!videoId) return [];
 
-      const firstAuthor =
-        (p.authors ?? "")
-          .replace(/[{}]/g, "")
-          .split(",")
-          .map((a) => a.trim())
-          .filter(Boolean)[0] ?? "";
-      const authorImage = firstAuthor
-        ? memberImageByName.get(normalizeName(firstAuthor)) ?? null
-        : null;
+    const firstAuthor =
+      (p.authors ?? "")
+        .replace(/[{}]/g, "")
+        .split(",")
+        .map((a) => a.trim())
+        .filter(Boolean)[0] ?? "";
+    const authorImage = firstAuthor
+      ? memberImageByName.get(normalizeName(firstAuthor)) ?? null
+      : null;
 
-      return {
+    return [
+      {
         _id: p._id,
         title: p.title,
         venue: p.venue,
@@ -89,11 +89,11 @@ export default async function DemoPage() {
         firstAuthor: firstAuthor || undefined,
         authorImage: authorImage ?? undefined,
         customThumbnail: p.demoThumbnailUrl ?? p.imageUrl ?? undefined,
-        demoUrl: p.demoUrl as string,
+        demoUrl: p.demoUrl,
         videoId,
-      };
-    })
-    .filter((d): d is DemoItem => d !== null);
+      },
+    ];
+  });
 
   return (
     <main className="bg-white">
