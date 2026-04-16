@@ -11,6 +11,8 @@ export interface DemoCardProps {
   customThumbnail?: string;
   videoId: string;
   demoUrl: string;
+  paperUrl?: string;
+  codeUrl?: string;
   onOpen: () => void;
 }
 
@@ -23,6 +25,8 @@ export default function DemoCard({
   customThumbnail,
   videoId,
   demoUrl,
+  paperUrl,
+  codeUrl,
   onOpen,
 }: DemoCardProps) {
   const ytMax = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
@@ -98,8 +102,40 @@ export default function DemoCard({
         <h3 className="text-base lg:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight line-clamp-2">
           {title}
         </h3>
-        {venueLabel && (
-          <p className="text-xs lg:text-sm font-semibold text-green-700">{venueLabel}</p>
+        {(venueLabel || paperUrl || codeUrl) && (
+          <div className="flex items-center justify-between gap-2">
+            {venueLabel ? (
+              <span className="text-xs lg:text-sm font-semibold text-green-700">{venueLabel}</span>
+            ) : (
+              <span />
+            )}
+            {(paperUrl || codeUrl) && (
+              <div className="flex items-center gap-1.5">
+                {paperUrl && (
+                  <a
+                    href={paperUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center px-2.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-700 hover:bg-sky-100 hover:border-sky-300 transition-colors"
+                  >
+                    paper
+                  </a>
+                )}
+                {codeUrl && (
+                  <a
+                    href={codeUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center px-2.5 py-1 rounded-full bg-violet-50 border border-violet-200 text-xs font-semibold text-violet-700 hover:bg-violet-100 hover:border-violet-300 transition-colors"
+                  >
+                    code
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
         )}
 
         {firstAuthor && (

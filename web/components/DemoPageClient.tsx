@@ -13,6 +13,8 @@ export interface DemoItem {
   authorImage?: string;
   customThumbnail?: string;
   demoUrl: string;
+  paperUrl?: string;
+  codeUrl?: string;
   videoId: string;
 }
 
@@ -41,6 +43,8 @@ export default function DemoPageClient({ demos }: DemoPageClientProps) {
                 customThumbnail={demo.customThumbnail}
                 videoId={demo.videoId}
                 demoUrl={demo.demoUrl}
+                paperUrl={demo.paperUrl}
+                codeUrl={demo.codeUrl}
                 onOpen={() => setSelected(demo)}
               />
             ))}

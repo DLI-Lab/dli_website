@@ -9,6 +9,8 @@ interface Publication {
   venue: string;
   authors: string;
   demoUrl?: string | null;
+  paperUrl?: string | null;
+  codeUrl?: string | null;
   imageUrl?: string | null;
   demoThumbnailUrl?: string | null;
 }
@@ -90,6 +92,8 @@ export default async function DemoPage() {
         authorImage: authorImage ?? undefined,
         customThumbnail: p.demoThumbnailUrl ?? p.imageUrl ?? undefined,
         demoUrl: p.demoUrl,
+        paperUrl: p.paperUrl ?? undefined,
+        codeUrl: p.codeUrl ?? undefined,
         videoId,
       },
     ];
