@@ -9,6 +9,7 @@ export interface PublicationCardProps {
   image?: string | null;
   paperUrl?: string;
   codeUrl?: string;
+  demoUrl?: string;
   highlight?: string | null;
   presentationType?: string | null;
 }
@@ -21,6 +22,7 @@ export default function PublicationCard({
   image,
   paperUrl,
   codeUrl,
+  demoUrl,
   highlight,
   presentationType,
 }: PublicationCardProps) {
@@ -86,7 +88,7 @@ export default function PublicationCard({
                 {presentationType === "Oral Presentation" ? "Oral" : presentationType}
               </div>
             )}
-            {(paperUrl || codeUrl) && (
+            {(paperUrl || codeUrl || demoUrl) && (
               <div className="flex flex-wrap gap-1.5">
                 {paperUrl && (
                   <a
@@ -106,6 +108,25 @@ export default function PublicationCard({
                     rel="noreferrer"
                   >
                     code
+                  </a>
+                )}
+                {demoUrl && (
+                  <a
+                    href={demoUrl}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700 hover:bg-rose-100 hover:border-rose-300 transition-colors"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Watch demo video"
+                  >
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="h-3 w-3"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    demo
                   </a>
                 )}
               </div>

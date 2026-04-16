@@ -49,6 +49,12 @@ export const publicationType = defineType({
       type: 'url',
     }),
     defineField({
+      name: 'demoUrl',
+      title: 'Demo URL',
+      type: 'url',
+      description: 'YouTube 또는 외부 데모 영상 링크',
+    }),
+    defineField({
       name: 'highlight',
       type: 'string',
     }),

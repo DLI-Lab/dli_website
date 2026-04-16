@@ -11,6 +11,7 @@ export const publicationsQuery = defineQuery(`
     image,
     paperUrl,
     codeUrl,
+    demoUrl,
     highlight,
     presentationType
   }
