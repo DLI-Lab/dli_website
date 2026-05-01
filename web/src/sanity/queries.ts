@@ -20,6 +20,7 @@ export const publicationsQuery = defineQuery(`
     "demoThumbnailUrl": demoThumbnail.asset->url,
     paperUrl,
     codeUrl,
+    datasetUrl,
     demoUrl,
     highlight,
     presentationType

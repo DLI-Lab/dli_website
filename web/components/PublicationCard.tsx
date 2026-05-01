@@ -9,6 +9,7 @@ export interface PublicationCardProps {
   image?: string | null;
   paperUrl?: string;
   codeUrl?: string;
+  datasetUrl?: string;
   demoUrl?: string;
   highlight?: string | null;
   presentationType?: string | null;
@@ -22,6 +23,7 @@ export default function PublicationCard({
   image,
   paperUrl,
   codeUrl,
+  datasetUrl,
   demoUrl,
   highlight,
   presentationType,
@@ -88,7 +90,7 @@ export default function PublicationCard({
                 {presentationType === "Oral Presentation" ? "Oral" : presentationType}
               </div>
             )}
-            {(paperUrl || codeUrl || demoUrl) && (
+            {(paperUrl || codeUrl || datasetUrl || demoUrl) && (
               <div className="flex flex-wrap gap-1.5">
                 {paperUrl && (
                   <a
@@ -108,6 +110,16 @@ export default function PublicationCard({
                     rel="noreferrer"
                   >
                     code
+                  </a>
+                )}
+                {datasetUrl && (
+                  <a
+                    href={datasetUrl}
+                    className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition-colors"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    dataset
                   </a>
                 )}
                 {demoUrl && (

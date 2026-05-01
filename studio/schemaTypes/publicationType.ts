@@ -55,6 +55,12 @@ export const publicationType = defineType({
       type: 'url',
     }),
     defineField({
+      name: 'datasetUrl',
+      title: 'Dataset URL',
+      type: 'url',
+      description: 'HuggingFace 등 데이터셋 링크',
+    }),
+    defineField({
       name: 'demoUrl',
       title: 'Demo URL',
       type: 'url',

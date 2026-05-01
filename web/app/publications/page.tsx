@@ -12,6 +12,7 @@ interface Publication {
   image?: any;
   paperUrl?: string | null;
   codeUrl?: string | null;
+  datasetUrl?: string | null;
   demoUrl?: string | null;
   highlight?: string | null;
   presentationType?: string | null;
@@ -26,6 +27,7 @@ function normalizePublication(pub: Publication): PublicationCardProps {
     image: pub.image ? undefined : undefined,
     paperUrl: pub.paperUrl ?? undefined,
     codeUrl: pub.codeUrl ?? undefined,
+    datasetUrl: pub.datasetUrl ?? undefined,
     demoUrl: pub.demoUrl ?? undefined,
     highlight: pub.highlight ?? undefined,
     presentationType: pub.presentationType ?? undefined,
