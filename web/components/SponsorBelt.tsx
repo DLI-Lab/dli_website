@@ -1,11 +1,17 @@
 const sponsors = [
   { name: "42dot", logo: "/sponsors/42dot.png" },
+  { name: "ETRI", logo: "/sponsors/etri.png" },
   { name: "Hyundai", logo: "/sponsors/hyundai.png" },
   { name: "IITP", logo: "/sponsors/iitp.png" },
+  { name: "KIST", logo: "/sponsors/kist.png" },
   { name: "LG Electronics", logo: "/sponsors/lg_electronics.png" },
+  { name: "Mobilint", logo: "/sponsors/mobilint.png" },
   { name: "Ministry of Science and ICT", logo: "/sponsors/ministry_of_science_and_ICT.png" },
   { name: "Naver", logo: "/sponsors/naver.png" },
+  { name: "NongHyup Bank", logo: "/sponsors/nonghyup_bank.png" },
   { name: "NRF", logo: "/sponsors/nrf.png" },
+  { name: "Samsung Life", logo: "/sponsors/samsung_life.png" },
+  { name: "SK Chemical", logo: "/sponsors/sk_chemical.png" },
   { name: "Theta Cloud", logo: "/sponsors/theta_cloud.png" },
 ];
 
