@@ -16,6 +16,13 @@ export const memberType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'hiddenFromTeam',
+      title: 'Hide from team page',
+      type: 'boolean',
+      description: '멤버 페이지에서만 숨깁니다. 멤버 데이터와 블로그 작성자 정보는 유지됩니다.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'category',
       type: 'string',
       options: {

@@ -125,7 +125,7 @@ export const galleriesQuery = defineQuery(`
 `);
 
 export const membersQuery = defineQuery(`
-  *[_type == "member"] | order(category asc, order asc, name asc) {
+  *[_type == "member" && hiddenFromTeam != true] | order(category asc, order asc, name asc) {
     _id,
     name,
     role,
