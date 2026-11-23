@@ -1,6 +1,7 @@
 const sponsors = [
   { name: "42dot", logo: "/sponsors/42dot.png" },
   { name: "ETRI", logo: "/sponsors/etri.png" },
+  { name: "Gabia", logo: "/sponsors/gabia.svg" },
   { name: "Hyundai", logo: "/sponsors/hyundai.png" },
   { name: "IITP", logo: "/sponsors/iitp.png" },
   { name: "KIST", logo: "/sponsors/kist.png" },
@@ -9,6 +10,8 @@ const sponsors = [
   { name: "Ministry of Science and ICT", logo: "/sponsors/ministry_of_science_and_ICT.png" },
   { name: "Naver", logo: "/sponsors/naver.png" },
   { name: "NongHyup Bank", logo: "/sponsors/nonghyup_bank.png" },
+  { name: "LIG D&A", logo: "/sponsors/lig_dna.png" },
+  { name: "NC AI", logo: "/sponsors/nc_ai.svg" },
   { name: "NRF", logo: "/sponsors/nrf.png" },
   { name: "Samsung Life", logo: "/sponsors/samsung_life.png" },
   { name: "SK Chemical", logo: "/sponsors/sk_chemical.png" },
@@ -22,6 +25,7 @@ function SponsorSet({ ariaHidden = false }: { ariaHidden?: boolean }) {
         const isLGElectronics = sponsor.name === "LG Electronics";
         const isICT = sponsor.name === "Ministry of Science and ICT";
         const isThetaCloud = sponsor.name === "Theta Cloud";
+        const isGabia = sponsor.name === "Gabia";
         return (
           <div
             key={sponsor.name}
@@ -29,7 +33,7 @@ function SponsorSet({ ariaHidden = false }: { ariaHidden?: boolean }) {
           >
             <div className={
               isLGElectronics ? "h-24 lg:h-32 w-auto" :
-              isThetaCloud ? "h-20 lg:h-24 w-auto" :
+              isThetaCloud || isGabia ? "h-20 lg:h-24 w-auto" :
               isICT ? "h-16 lg:h-20 w-auto" :
               "h-12 lg:h-16 w-auto"
             }>
@@ -38,7 +42,7 @@ function SponsorSet({ ariaHidden = false }: { ariaHidden?: boolean }) {
                 alt={sponsor.name}
                 className={`h-full w-auto object-contain ${
                   isLGElectronics ? "max-w-[290px] lg:max-w-[360px]" :
-                  isThetaCloud ? "max-w-[225px] lg:max-w-[270px]" :
+                  isThetaCloud || isGabia ? "max-w-[225px] lg:max-w-[270px]" :
                   isICT ? "max-w-[175px] lg:max-w-[225px]" :
                   "max-w-[145px] lg:max-w-[175px]"
                 }`}
